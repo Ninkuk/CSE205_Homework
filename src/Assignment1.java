@@ -9,12 +9,16 @@ public class Assignment1 {
     private static void calculateCosts() {
         Scanner scanKeyboard = new Scanner(System.in);
 
-        System.out.println("\nPlease enter haircut type (adult or kids): ");
+        System.out.println("\nPlease enter haircut type (adult or kids) : ");
         String haircutType;
         while (true) {
-            haircutType = scanKeyboard.nextLine().toLowerCase();
-            if (haircutType.equals("adult") || haircutType.equals("kids")) {
-                break;
+            if (scanKeyboard.hasNextLine()) {
+                haircutType = scanKeyboard.nextLine().toLowerCase();
+                if (haircutType.equals("adult") || haircutType.equals("kids")) {
+                    break;
+                } else {
+                    System.out.println("Sorry, please input a valid haircut type (adult or kids)");
+                }
             } else {
                 System.out.println("Sorry, please input a valid haircut type (adult or kids)");
             }
@@ -24,9 +28,13 @@ public class Assignment1 {
         System.out.println("\nPlease enter the coupon color code (green-1, blue-2, no coupon-0): ");
         int couponColor;
         while (true) {
-            couponColor = scanKeyboard.nextInt();
-            if (couponColor == 1 || couponColor == 2 || couponColor == 0) {
-                break;
+            if (scanKeyboard.hasNextInt()) {
+                couponColor = scanKeyboard.nextInt();
+                if (couponColor == 1 || couponColor == 2 || couponColor == 0) {
+                    break;
+                } else {
+                    System.out.println("Sorry, please enter a valid coupon code (green-1, blue-2, no coupon-0)");
+                }
             } else {
                 System.out.println("Sorry, please enter a valid coupon code (green-1, blue-2, no coupon-0)");
             }
