@@ -1,9 +1,18 @@
 import java.util.Scanner;
 
-
+/**
+ * ALGORITHM
+ *
+ * Display the welcome message
+ * Prompt user to enter what kind of haircut they want. Store that value in a variable.
+ * Then prompt the user to enter a coupon value (if they have one, if not input 0). Store the value in a variable.
+ * Use a switch case to assign values to adult and kid cost according to the coupon.
+ * Display the final cost.
+ * Ask whether the user wants to run program again or not.
+ */
 public class Assignment1 {
     public static void main(String[] args) {
-        displayWelcomeHeader(); //This method displays the stylized welcome header text
+        displayWelcomeHeader(); // This method displays the stylized welcome header text
         calculateCosts(); // This method takes user input and calculates the cost of haircut
     }
 
@@ -12,10 +21,10 @@ public class Assignment1 {
 
         System.out.println("\nPlease enter haircut type (adult or kid) : ");
         String haircutType;
-        //This while loop will accept inputs until user types either adult or kid
+        // This while loop will accept inputs until user types either adult or kid
         while (true) {
             if (scanKeyboard.hasNextLine()) {
-                haircutType = scanKeyboard.nextLine().toLowerCase(); //In case user types input in all uppercase or "Adult" which isn't equal to "adult"
+                haircutType = scanKeyboard.nextLine().toLowerCase(); // In case user types input in all uppercase or "Adult" which isn't equal to "adult"
                 if (haircutType.equals("adult") || haircutType.equals("kid")) {
                     break;
                 } else {
@@ -29,7 +38,7 @@ public class Assignment1 {
 
         System.out.println("\nPlease enter the coupon color code (green-1, blue-2, no coupon-0): ");
         int couponColor;
-        //This while loop will accept inputs until user types a coupon number
+        // This while loop will accept inputs until user types a coupon number
         while (true) {
             if (scanKeyboard.hasNextInt()) {
                 couponColor = scanKeyboard.nextInt();
@@ -71,7 +80,7 @@ public class Assignment1 {
         System.out.println("More Calculations? (YES/NO)");
         String rerun = scanKeyboard.next().toLowerCase(); // In case user types input in all lowercase or "Yes" which isn't equal to "YES" or "yes"
         if (rerun.equals("yes")) {
-            calculateCosts(); //Recursion
+            calculateCosts(); // Recursion
         }
     }
 
