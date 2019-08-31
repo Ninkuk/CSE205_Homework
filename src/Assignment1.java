@@ -65,6 +65,7 @@ public class Assignment1 {
 
         System.out.println("Your Total: $" + totalCost);
 
+        // Converted input to lowercase in case user typed the answer in lowercase
         System.out.println("More Calculations? (YES/NO)");
         String rerun = scanKeyboard.next().toLowerCase();
         if (rerun.equals("yes")) {
