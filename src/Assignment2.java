@@ -55,6 +55,8 @@ public class Assignment2 {
             } else {
                 System.out.println("Please enter a valid number");
             }
+
+            scan.nextLine(); // Removes the next line. Without this we will be stuck in infinite loop.
         }
 
         return cardNumber;
