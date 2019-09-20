@@ -1,8 +1,9 @@
 public class BankAccount {
-    private int accountNumber;
-    private int balance;
 
-    private static int numberOfAccounts = 0;
+    private int accountNumber;
+    private double balance;
+
+    private static int numberOfAccounts;
 
     public BankAccount() {
         this.accountNumber = 0;
@@ -10,18 +11,28 @@ public class BankAccount {
         numberOfAccounts++;
     }
 
-    public BankAccount(int accountNumber, int balance) {
+    public BankAccount(int accountNumber, double balance) {
         this.accountNumber = accountNumber;
         this.balance = balance;
         numberOfAccounts++;
     }
 
-    public void depositMoney(int amount) {
-        this.balance += amount;
+    public double depositMoney(double amount) {
+        balance += amount;
+        return balance;
     }
 
-    public int withdrawMoney(int amount) {
-        this.balance -= amount;
-        return amount;
+    public double withdrawMoney(double amount) {
+        balance -= amount;
+        return balance;
+    }
+
+    @Override
+    public String toString() {
+        return "Account Number: " + accountNumber + ",\nbalance: " + balance;
+    }
+
+    public static int getNumberOfAccounts() {
+        return numberOfAccounts;
     }
 }
