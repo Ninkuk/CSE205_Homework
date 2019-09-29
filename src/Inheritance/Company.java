@@ -29,6 +29,7 @@ public class Company {
         // display employee information for each employee
         for (int i = 0; i < empList.size(); i++) {
             System.out.println(empList.get(i));
+            System.out.println();
         }
     }
 }

@@ -9,7 +9,13 @@ public class MonthlyPaidEmp extends Employee {
         this.annualSalary = annualSalary;
     }
 
+    public void calculateSalary() {
+        super.monthlySalary = annualSalary / 12;
+        super.taxPaid = super.monthlySalary * super.taxRate;
+    }
 
-
-
+    @Override
+    public String toString() {
+        return super.toString();
+    }
 }
