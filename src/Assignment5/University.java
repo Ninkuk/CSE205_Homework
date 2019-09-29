@@ -5,7 +5,7 @@ import java.util.*;
 public class University {
     public static void main(String[] args) {
         String univ_Name, location;
-        ArrayList<People> people = new ArrayList<People>();
+        ArrayList<People> people = new ArrayList<>();
 
         char choice = 'A';
         String line;
@@ -207,8 +207,6 @@ public class University {
 
                     default:
                         System.out.println("default");
-
-
                 }
 
 
