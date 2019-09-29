@@ -9,4 +9,14 @@ public class HourlyPaidEmp extends Employee {
         this.hoursWorked = hoursWorked;
         this.hourlyRate = hourlyRate;
     }
+
+    public void calculateSalary() {
+        super.monthlySalary = hoursWorked * hourlyRate;
+        super.taxPaid = super.monthlySalary * super.taxRate;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString();
+    }
 }
