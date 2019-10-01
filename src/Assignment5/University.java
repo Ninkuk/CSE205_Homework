@@ -18,6 +18,8 @@ public class University {
         System.out.println("Please enter the location of " + univ_Name);
         location = scan.nextLine();
 
+        //Declared once here and instantiated multiple times in the switch case
+        String[] peopleInfo = new String[3];
         String first_name;
         String last_name;
         String phoneNumber;
@@ -42,19 +44,20 @@ public class University {
                          * finally add the student instance to the people list
                          */
 
-                        System.out.println("Please enter the First Name: ");
-                        first_name = scan.nextLine();
+                        peopleInfo = getPeopleInfo(scan);
+                        first_name = peopleInfo[0];
+                        last_name = peopleInfo[1];
+                        phoneNumber = peopleInfo[2];
 
-                        System.out.println("Please enter the Last Name: ");
-                        last_name = scan.nextLine();
-
-                        System.out.println("Please enter the Phone Number: ");
-                        phoneNumber = scan.nextLine();
-
-                        System.out.println("Please enter the Major: ");
+                        System.out.println("Please enter your Major: ");
                         String major = scan.nextLine();
 
                         Student student = new Student(first_name, last_name, phoneNumber, major);
+
+                        System.out.println("Please enter your GPA: ");
+                        student.setGpa(scan.nextDouble());
+                        scan.nextLine();
+
                         people.add(student);
 
                         break;
@@ -65,24 +68,20 @@ public class University {
                          * finally add the Staff instance to the people list
                          */
 
-                        System.out.println("Please enter the First Name: ");
-                        first_name = scan.nextLine();
+                        peopleInfo = getPeopleInfo(scan);
+                        first_name = peopleInfo[0];
+                        last_name = peopleInfo[1];
+                        phoneNumber = peopleInfo[2];
 
-                        System.out.println("Please enter the Last Name: ");
-                        last_name = scan.nextLine();
-
-                        System.out.println("Please enter the Phone Number: ");
-                        phoneNumber = scan.nextLine();
-
-                        System.out.println("Please enter the Pay Rate: ");
+                        System.out.println("Please enter your Pay Rate: ");
                         payRate = scan.nextDouble();
                         scan.nextLine();
 
-                        System.out.println("Please enter the Pay Scale: ");
+                        System.out.println("Please enter your Pay Scale: ");
                         payScale = scan.nextInt();
                         scan.nextLine();
 
-                        System.out.println("Please enter the Title: ");
+                        System.out.println("Please enter your Title: ");
                         String title = scan.nextLine();
 
                         Staff staff = new Staff(first_name, last_name, phoneNumber, payRate, payScale, title);
@@ -98,27 +97,34 @@ public class University {
                          * finally add the Faculty instance to the people list
                          */
 
-                        System.out.println("Please enter the First Name: ");
-                        first_name = scan.nextLine();
+                        peopleInfo = getPeopleInfo(scan);
+                        first_name = peopleInfo[0];
+                        last_name = peopleInfo[1];
+                        phoneNumber = peopleInfo[2];
 
-                        System.out.println("Please enter the Last Name: ");
-                        last_name = scan.nextLine();
-
-                        System.out.println("Please enter the Phone Number: ");
-                        phoneNumber = scan.nextLine();
-
-                        System.out.println("Please enter the Pay Rate: ");
+                        System.out.println("Please enter your Pay Rate: ");
                         payRate = scan.nextDouble();
                         scan.nextLine();
 
-                        System.out.println("Please enter the Pay Scale: ");
+                        System.out.println("Please enter your Pay Scale: ");
                         payScale = scan.nextInt();
                         scan.nextLine();
 
-                        System.out.println("Please enter the Department: ");
+                        System.out.println("Please enter your Department: ");
                         String department = scan.nextLine();
 
                         Faculty faculty = new Faculty(first_name, last_name, phoneNumber, payRate, payScale, department);
+
+                        System.out.println("Please enter the classes you teach. Once finished enter \"DONE\"");
+                        while (true) {
+                            String inputValue = scan.nextLine();
+                            if (inputValue.equalsIgnoreCase("done")) {
+                                break;
+                            } else {
+                                faculty.addClass(inputValue);
+                            }
+                        }
+
                         people.add(faculty);
 
                         break;
@@ -129,25 +135,11 @@ public class University {
                          *staff
                          */
 
-                        int numberOfStudents = 0;
-                        int numberOfFaculty = 0;
-                        int numberOfStaff = 0;
-
-                        for (People person : people) {
-                            if (person instanceof Student) {
-                                numberOfStudents++;
-                            } else if (person instanceof Faculty) {
-                                numberOfFaculty++;
-                            } else {
-                                numberOfStaff++;
-                            }
-                        }
-
                         System.out.println("University Name: " + univ_Name +
                                 "\nLocation: " + location +
-                                "\nNumber of Students: " + numberOfStudents +
-                                "\nNumber of Faculty: " + numberOfFaculty +
-                                "\nNumber of Staff: " + numberOfStaff);
+                                "\nNumber of Students: " + Student.numberOfStudents +
+                                "\nNumber of Faculty: " + Faculty.numberOfFaculty +
+                                "\nNumber of Staff: " + Staff.numberOfStaff);
 
                         break;
 
@@ -158,7 +150,7 @@ public class University {
                          */
 
                         for (People person : people) {
-                            System.out.println(person);
+                            System.out.println(person.getName());
                         }
 
                         break;
@@ -175,6 +167,7 @@ public class University {
 
                         for (People person : people) {
                             if (person instanceof Student) {
+                                //This returns GPA too but no way to get the student info from person object directly and toString override of Student class needs GPA to be returned.
                                 System.out.println(person);
                             }
                         }
@@ -183,13 +176,12 @@ public class University {
 
                     case 'G':
                         // display Employee info
-                        /* display fist name, last name, pay rate, and monthly pay of each employee
-                         *
-                         */
+                        // display fist name, last name, pay rate, and monthly pay of each employee
 
                         for (People person : people) {
                             if (person instanceof Employee) {
-                                System.out.println(person);
+                                person.calculatePay();
+                                System.out.println(person.getName() + "\nPay Rate: " + person.payRate + "\nMonthly Pay: " + person.monthlyPay);
                             }
                         }
 
@@ -197,8 +189,8 @@ public class University {
 
                     case 'Q':
                         // quit the program
-
                         break;
+
                     case '?':
                         // display the menu again
                         printMenu();
@@ -217,6 +209,22 @@ public class University {
         } while (choice != 'Q');
 
 
+    }
+
+    private static String[] getPeopleInfo(Scanner scan) {
+
+        String[] peopleInfo = new String[3];
+
+        System.out.println("Please enter your First Name: ");
+        peopleInfo[0] = scan.nextLine();
+
+        System.out.println("Please enter your Last Name: ");
+        peopleInfo[1] = scan.nextLine();
+
+        System.out.println("Please enter your Phone Number: ");
+        peopleInfo[2] = scan.nextLine();
+
+        return peopleInfo;
     }
 
     public static void printMenu() {

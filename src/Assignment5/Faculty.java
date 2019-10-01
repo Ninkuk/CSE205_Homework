@@ -7,9 +7,11 @@ import java.util.List;
 public class Faculty extends Employee {
     private String department;
     private ArrayList<String> classesTeach = new ArrayList<>();
+    public static int numberOfFaculty;
 
     public Faculty(String first_name, String last_name, String phoneNumber, double payRate, int payScale, String department) {
         super(first_name, last_name, phoneNumber, payRate, payScale);
+        numberOfFaculty++;
     }
 
 

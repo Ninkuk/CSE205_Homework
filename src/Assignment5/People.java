@@ -25,6 +25,6 @@ public class People {
 
     @Override
     public String toString() {
-        return "Name: " + first_name + " " + last_name + "\nPhone Number: " + phoneNumber;
+        return "Name: " + getName() + "\nPhone Number: " + phoneNumber;
     }
 }
