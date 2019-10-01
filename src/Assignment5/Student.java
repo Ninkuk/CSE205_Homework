@@ -1,10 +1,9 @@
 package Assignment5;
 
 public class Student extends People {
+    public static int numberOfStudents;
     private String major;
     private double gpa;
-    public static int numberOfStudents;
-
 
     public Student(String first_name, String last_name, String phoneNumber, String major) {
         super(first_name, last_name, phoneNumber);

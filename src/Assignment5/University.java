@@ -1,6 +1,7 @@
 package Assignment5;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 public class University {
     public static void main(String[] args) {
@@ -128,7 +129,6 @@ public class University {
                         people.add(faculty);
 
                         break;
-
                     case 'D':
                         // display university info
                         /* university name, location, number of students, number of faculty and number of
@@ -142,7 +142,6 @@ public class University {
                                 "\nNumber of Staff: " + Staff.numberOfStaff);
 
                         break;
-
                     case 'E':
                         // display people info
                         /* display the fist name and the last name of each person at school
@@ -154,7 +153,6 @@ public class University {
                         }
 
                         break;
-
                     case 'F':
                         // display Student info
                         /* display fist name, last name, and the major of each student
@@ -173,7 +171,6 @@ public class University {
                         }
 
                         break;
-
                     case 'G':
                         // display Employee info
                         // display fist name, last name, pay rate, and monthly pay of each employee
