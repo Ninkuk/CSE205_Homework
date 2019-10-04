@@ -140,6 +140,7 @@ public class University {
                                 "\nNumber of Students: " + Student.numberOfStudents +
                                 "\nNumber of Faculty: " + Faculty.numberOfFaculty +
                                 "\nNumber of Staff: " + Staff.numberOfStaff);
+                        System.out.println(); //line break. puts a divider between university info and menu
 
                         break;
                     case 'E':
@@ -151,6 +152,8 @@ public class University {
                         for (People person : people) {
                             System.out.println(person.getName());
                         }
+
+                        System.out.println(); //line break. puts a divider between people info and menu
 
                         break;
                     case 'F':
@@ -167,6 +170,7 @@ public class University {
                             if (person instanceof Student) {
                                 //This returns GPA too but no way to get the student info from person object directly and toString override of Student class needs GPA to be returned.
                                 System.out.println(person);
+                                System.out.println(); //line break. puts a divider between student info
                             }
                         }
 
@@ -179,6 +183,7 @@ public class University {
                             if (person instanceof Employee) {
                                 person.calculatePay();
                                 System.out.println(person.getName() + "\nPay Rate: " + person.payRate + "\nMonthly Pay: " + person.monthlyPay);
+                                System.out.println(); //line break. puts a divider between employee info
                             }
                         }
 
