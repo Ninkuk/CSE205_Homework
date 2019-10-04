@@ -6,8 +6,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
 
 public class ClassActivity4 extends Application {
@@ -16,40 +16,49 @@ public class ClassActivity4 extends Application {
         launch(args);
     }
 
-    private Shape shape = null;
-
     @Override
     public void start(Stage primaryStage) {
 
-        shape = new Circle();
+        //shapes created here and shown on button click
+        Rectangle rectangle = new Rectangle(100, 50, Color.BLUE);
+        Circle circle = new Circle(50, Color.RED);
+        Line line = new Line(0, 0, 50, 50);
 
+        //Buttons
         Button btnRectangle = new Button("Rectangle");
         Button btnCircle = new Button("Circle");
         Button btnLine = new Button("Line");
 
-        btnRectangle.setOnAction(action -> {
-            shape = new Rectangle();
-        });
-
-        btnCircle.setOnAction(action -> {
-            shape = new Circle(5, Color.RED);
-        });
-
-        btnLine.setOnAction(action -> {
-
-        });
-
+        //shows elements horizontally
         HBox hbox = new HBox();
-        hbox.getChildren().addAll(btnRectangle, btnCircle, btnLine, shape);
+        hbox.getChildren().addAll(btnRectangle, btnCircle, btnLine);
         hbox.setAlignment(Pos.CENTER);
 
+        //button to show the rectangle and remove other shapes
+        btnRectangle.setOnAction(action -> {
+            hbox.getChildren().add(rectangle);
+            hbox.getChildren().removeAll(circle, line);
+        });
+
+        //button to show the circle and remove other shapes
+        btnCircle.setOnAction(action -> {
+            hbox.getChildren().add(circle);
+            hbox.getChildren().removeAll(rectangle, line);
+        });
+
+        //button to show the line and remove other shapes
+        btnLine.setOnAction(action -> {
+            hbox.getChildren().add(line);
+            hbox.getChildren().removeAll(rectangle, circle);
+        });
+
+        //For centering hbox vertically
         VBox vbox = new VBox();
-        vbox.getChildren().addAll(hbox);
+        vbox.getChildren().add(hbox);
         vbox.setAlignment(Pos.CENTER);
 
         //Create Scene
-        //TODO replace node/view accordingly
-        Scene scene = new Scene(vbox, 200, 200);
+        Scene scene = new Scene(vbox, 750, 500);
 
         //set the title
         primaryStage.setTitle("Activity #1 - CSE 205");
