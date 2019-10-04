@@ -7,7 +7,7 @@ public class RiemannSums {
         int a = 1;
 
         int x = (b - a) / n;
-        double[] points = {1.05, 1.25, 1.75, 2.45, 2.9, 3.3};
+        double[] points = {1.1, 1.3, 1.7, 2.4, 3.3};
 
         System.out.println("Left: " + leftRule(x, points));
         System.out.println("Right: " + rightRule(x, points));
