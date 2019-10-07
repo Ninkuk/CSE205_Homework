@@ -4,18 +4,21 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class Pizza extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+        //Borderpane
         BorderPane borderPane = new BorderPane();
-        TextArea textArea = new TextArea();
 
+        //TextArea Layout
+        TextArea textArea = new TextArea();
+        textArea.setMaxWidth(200);
+
+        //Radio Button Layout + ToggleGroup
         ToggleGroup pizzaTypeGroup = new ToggleGroup();
 
         RadioButton cheeseSelection = new RadioButton("Cheese");
@@ -30,10 +33,12 @@ public class Pizza extends Application {
         veggieSelection.setToggleGroup(pizzaTypeGroup);
         veggieSelection.setUserData(15.00);
 
+        //Checkboxes layout
         CheckBox extraCheeseSelection = new CheckBox("Extra Cheese");
         CheckBox baconSelection = new CheckBox("Bacon");
         CheckBox mushroomSelection = new CheckBox("Mushroom");
 
+        //Calculate Button Layout and onAction
         Button calcButton = new Button("Calculate Total");
         calcButton.setMaxWidth(primaryStage.getMaxWidth());
         calcButton.setOnAction(action -> {
@@ -59,22 +64,25 @@ public class Pizza extends Application {
         });
 
 
+        //creating radio button column
         VBox pizzaTypeColumn = new VBox(5);
         pizzaTypeColumn.getChildren().addAll(new Label("Pizza Type"), cheeseSelection, pepperoniSelection, veggieSelection);
-//        pizzaTypeColumn.setStyle("-fx-border-style: solid; -fx-border-color: #212121; -fx-border-width: 5");
 
+        //creating checkbox column
         VBox pizzaToppingsColumn = new VBox(5);
         pizzaToppingsColumn.getChildren().addAll(new Label("Toppings"), extraCheeseSelection, baconSelection, mushroomSelection);
+
 
         HBox hBox = new HBox(25);
         hBox.getChildren().addAll(pizzaTypeColumn, pizzaToppingsColumn);
         hBox.setAlignment(Pos.CENTER);
 
+        //Used for aligning contents vertically
         VBox vBox = new VBox();
         vBox.getChildren().add(hBox);
         vBox.setAlignment(Pos.CENTER);
 
-
+        //sets the borderpane layout
         borderPane.setCenter(vBox);
         borderPane.setTop(new Label("Joe's Pizza"));
         borderPane.setRight(textArea);
@@ -83,8 +91,8 @@ public class Pizza extends Application {
         //Create Scene
         Scene scene = new Scene(borderPane, 800, 300);
 
-        //TODO set the title
-        primaryStage.setTitle("");
+        //set the title
+        primaryStage.setTitle("Joe's Pizza Shop");
 
         //set the scene
         primaryStage.setScene(scene);
