@@ -1,0 +1,23 @@
+.label {
+    -fx-font-size: 15px;
+}
+
+.button {
+    -fx-padding: 10px 0px;
+    -fx-font-size: 15px;
+    -fx-background-color: #00BFA5;
+    -fx-pref-width: 200;
+    -fx-text-fill: #FFFFFF;
+}
+
+.button:hover {
+    -fx-background-color: #1DE9B6;
+}
+
+.exit-btn {
+    -fx-background-color: #F44336;
+}
+
+.exit-btn:hover {
+    -fx-background-color: #D50000;
+}
