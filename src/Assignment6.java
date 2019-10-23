@@ -1,10 +1,21 @@
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Assignment6 {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException {
 
-        int[] numbers = getNumbersArray();
+//        int[] numbers = getNumbersArray();
+//        File file = new File("nums.txt");
+        Scanner scan = new Scanner(new File("E:\\Java\\Homework_Assignments\\src\\numbersArray.txt"));
+
+        int[] numbers = new int[100];
+        int xx = 0;
+        while (scan.hasNextInt()) {
+            numbers[xx] = scan.nextInt();
+            xx++;
+        }
 
         int startIndex = 0, endIndex = 0;
         for (int i = 0; i < numbers.length; i++) {
@@ -17,8 +28,11 @@ public class Assignment6 {
         int min = findMin(numbers, startIndex, endIndex);
         System.out.println(min);
         int oddCount = countOdd(numbers, startIndex, endIndex);
+        System.out.println(oddCount);
 //        int negativeOneCount = countNegativeOne(numbers, count);
 //        int sumAtEvenIndexes = computeSumAtEvenIndexes(numbers, count);
+
+        scan.close();
     }
 
     private static int findMin(int[] numbers, int startIndex, int endIndex) {
@@ -30,8 +44,15 @@ public class Assignment6 {
     }
 
     private static int countOdd(int[] numbers, int startIndex, int endIndex) {
-        if (numbers[endIndex] % 2 != 0) {
-            return 1;
+
+        if (endIndex == startIndex) {
+            if (numbers[endIndex] % 2 != 0) {
+                return 1;
+            } else return 0;
+        } else {
+            if (numbers[endIndex] % 2 != 0) {
+                return countOdd(numbers, startIndex, endIndex - 1) + 1;
+            }
         }
 
         return countOdd(numbers, startIndex, endIndex - 1);
