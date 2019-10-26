@@ -119,8 +119,8 @@ public class Main extends Application {
         // Displays the number and call duration in a ascending order
         sortCallsBtn.setOnAction(event -> {
             rightPanel.getChildren().clear();
-            for (int i = 0; i < callRecordList.size(); i++) {
-                rightPanel.getChildren().add(new Label("Destination Number: " + callRecordList.get(i).getNumber() + "\nDuration: " + callRecordList.get(i).getDuration()));
+            for (PhoneCall phoneCall : callRecordList) {
+                rightPanel.getChildren().add(new Label("Destination Number: " + phoneCall.getNumber() + "\nDuration: " + phoneCall.getDuration()));
             }
         });
 
@@ -134,14 +134,19 @@ public class Main extends Application {
                 System.err.println("Could be a Relative Path Issue");
             }
 
-            out.println("Destination Number    Duration(m)    Cost($)");
-            double total = 0;
-            for (PhoneCall phoneCall : callRecordList) {
-                out.println(phoneCall.getNumber() + "          " + phoneCall.getDuration() + "             " + phoneCall.getCost());
-                total += phoneCall.getCost();
+            if (out != null) {
+                out.println("Destination Number    Duration(m)    Cost($)");
+                double total = 0;
+                for (PhoneCall phoneCall : callRecordList) {
+                    out.println(phoneCall.getNumber() + "          " + phoneCall.getDuration() + "             " + phoneCall.getCost());
+                    total += phoneCall.getCost();
+                }
+                out.println("\nTotal: " + NumberFormat.getCurrencyInstance().format(total));
+                out.close();
+            } else {
+                System.err.println("Error Creating File!");
             }
-            out.println("\nTotal: " + NumberFormat.getCurrencyInstance().format(total));
-            out.close();
+
 
             rightPanel.getChildren().clear();
             hintText.setText("Phone bill generated successfully!");
@@ -149,9 +154,7 @@ public class Main extends Application {
         });
 
         // Closes the program
-        exitBtn.setOnAction(event -> {
-            Platform.exit();
-        });
+        exitBtn.setOnAction(event -> Platform.exit());
 
 
         // Create Scene
