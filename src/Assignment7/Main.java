@@ -1,19 +1,36 @@
 package Assignment7;
 
+import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Main {
-    public static void main(String[] args) throws FileNotFoundException {
+public class Main extends Application {
+    public static void main(String[] args) {
+        launch(args);
+    }
 
-        //Relative path depends on your working directory
-        //TODO: Change Path
+    @Override
+    public void start(Stage primaryStage) throws FileNotFoundException {
         Scanner in = new Scanner(new File("src/Assignment7/phoneCalls.txt"));
 
         ArrayList<PhoneCall> callRecordList = new ArrayList<>();
 
+        // Creates call record objects
         while (in.hasNextLine()) {
             String readLine = in.nextLine();
             String[] lineSplit = readLine.split("/");
@@ -21,61 +38,138 @@ public class Main {
             callRecordList.add(call);
         }
 
-        char choice = 'A';
-        String input;
-        Scanner scan = new Scanner(System.in);
+        // Left Panel Layout
+        VBox optionsMenu = new VBox();
 
-        do {
-            System.out.println("What action would you like to perform?");
-            printMenu();
-            input = scan.nextLine();
+        // Menu Buttons - left panel
+        Button searchCallBtn = new Button("Call Search");
+        Button longestCallBtn = new Button("Longest Call");
+        Button shortestCallBtn = new Button("Shortest Call");
+        Button sortCallsBtn = new Button("Sort Calls");
+        Button prepareBillBtn = new Button("Prepare Phone Bill");
+        Button exitBtn = new Button("Exit");
+        exitBtn.getStyleClass().add("exit-btn");
 
-            if (input.length() == 1) {
-                choice = Character.toUpperCase(input.charAt(0));
+        optionsMenu.getChildren().addAll(new Label("Menu"), searchCallBtn, longestCallBtn, shortestCallBtn, sortCallsBtn, prepareBillBtn, exitBtn);
+        optionsMenu.setSpacing(10);
+        optionsMenu.setAlignment(Pos.CENTER);
+
+        // Right Panel Layout
+        Label hintText = new Label("Select an option from the menu...");
+
+        VBox rightPanel = new VBox();
+        rightPanel.getChildren().add(hintText);
+        rightPanel.setSpacing(10);
+        rightPanel.setAlignment(Pos.CENTER);
+
+        // Sets the main layout
+        BorderPane borderPane = new BorderPane();
+        borderPane.setStyle("-fx-background-color: #FFFFFF;");
+        borderPane.setLeft(optionsMenu);
+        borderPane.setRight(rightPanel);
+        BorderPane.setMargin(optionsMenu, new Insets(0, 0, 0, 100));
+        BorderPane.setMargin(rightPanel, new Insets(0, 100, 0, 0));
+
+        // Number search field and button
+        TextField numberInput = new TextField();
+        numberInput.setPromptText("Phone Number");
+        Button enterButton = new Button("Enter");
+
+        // Button click handlers
+
+        // Shows the search box and button
+        searchCallBtn.setOnAction(event -> {
+            numberInput.clear();
+            rightPanel.getChildren().clear();
+            rightPanel.getChildren().addAll(numberInput, enterButton);
+            borderPane.setRight(rightPanel);
+        });
+
+        // Calls the callSearch method and displays the call info if found
+        enterButton.setOnAction(event -> {
+            rightPanel.getChildren().clear();
+
+            PhoneCall callSearch;
+            callSearch = searchCall(numberInput.getText(), callRecordList);
+
+            if (callSearch == null) {
+                hintText.setText("Sorry, no number found! Please try again!");
+                rightPanel.getChildren().add(hintText);
             } else {
-                System.out.println("Sorry, Invalid input. Please try again!");
-                continue;
+                printCallInfo(rightPanel, callSearch);
             }
 
-            switch (choice) {
-                case 'A':
-                    System.out.println("Enter the number you wish to search:");
-                    PhoneCall callSearch;
-                    callSearch = searchCall(scan.nextLine(), callRecordList);
+        });
 
-                    if (callSearch == null) {
-                        System.out.println("Sorry, no number found!");
-                        break;
-                    } else {
-                        printCallInfo(callSearch);
-                    }
+        // Since next 3 methods require the array to be sorted, I will sort it at once here
+        sort(callRecordList, 0, callRecordList.size() - 1);
 
-                    break;
-                case 'B':
-                    printCallInfo(searchLongestCall(callRecordList));
+        // Displays the call info of longest call. Gets the object at the last index since it is already sorted
+        longestCallBtn.setOnAction(event -> {
+            rightPanel.getChildren().clear();
+            printCallInfo(rightPanel, callRecordList.get(callRecordList.size() - 1));
+        });
 
-                    break;
-                case 'C':
-                    printCallInfo(searchShortestCall(callRecordList));
+        // Displays the call info of shortest call. Gets the object at the first index since it is already sorted
+        shortestCallBtn.setOnAction(event -> {
+            rightPanel.getChildren().clear();
+            printCallInfo(rightPanel, callRecordList.get(0));
+        });
 
-                    break;
-                case 'D':
+        // Displays the number and call duration in a ascending order
+        sortCallsBtn.setOnAction(event -> {
+            rightPanel.getChildren().clear();
+            for (int i = 0; i < callRecordList.size(); i++) {
+                rightPanel.getChildren().add(new Label("Destination Number: " + callRecordList.get(i).getNumber() + "\nDuration: " + callRecordList.get(i).getDuration()));
+            }
+        });
 
-
-                    break;
-                case 'E':
-                    break;
-                default:
-                    System.out.println("Sorry, Invalid input. Please try again!");
-                    break;
+        // Creates phone_bills.txt
+        prepareBillBtn.setOnAction(event -> {
+            PrintWriter out = null;
+            try {
+                out = new PrintWriter("phone_bills.txt");
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+                System.err.println("Could be a Relative Path Issue");
             }
 
+            out.println("Destination Number    Duration(m)    Cost($)");
+            double total = 0;
+            for (PhoneCall phoneCall : callRecordList) {
+                out.println(phoneCall.getNumber() + "          " + phoneCall.getDuration() + "             " + phoneCall.getCost());
+                total += phoneCall.getCost();
+            }
+            out.println("\nTotal: " + NumberFormat.getCurrencyInstance().format(total));
+            out.close();
 
-        } while (choice != 'F');
+            rightPanel.getChildren().clear();
+            hintText.setText("Phone bill generated successfully!");
+            rightPanel.getChildren().add(hintText);
+        });
 
+        // Closes the program
+        exitBtn.setOnAction(event -> {
+            Platform.exit();
+        });
+
+
+        // Create Scene
+        Scene scene = new Scene(borderPane, 1000, 500);
+        scene.getStylesheets().add("./Assignment7/styles.css");
+
+        // Title
+        primaryStage.setTitle("Assignment 7 - Phone Calls");
+
+        // Set the scene
+        primaryStage.setScene(scene);
+
+        // Show the content on window
+        primaryStage.show();
     }
 
-    private static PhoneCall searchCall(String numberToSearch, ArrayList<PhoneCall> callRecordList) {
+    // Linear Search. TODO: Binary Search with Strings?
+    private PhoneCall searchCall(String numberToSearch, ArrayList<PhoneCall> callRecordList) {
         for (PhoneCall callRecord : callRecordList) {
             if (numberToSearch.equals(callRecord.getNumber())) {
                 return callRecord;
@@ -85,53 +179,43 @@ public class Main {
         return null;
     }
 
-    private static PhoneCall searchLongestCall(ArrayList<PhoneCall> callRecordList) {
-        PhoneCall longestCall = null;
-        int longestDuration = Integer.MIN_VALUE;
-        for (PhoneCall callRecord : callRecordList) {
-            if (callRecord.getDuration() > longestDuration) {
-                longestCall = callRecord;
+    // Quick Sort
+    private void sort(ArrayList<PhoneCall> callRecordList, int start, int end) {
+        if (start < end) {
+            int part = partition(callRecordList, start, end);
+
+            sort(callRecordList, start, part - 1);
+            sort(callRecordList, part + 1, end);
+        }
+    }
+
+    private int partition(ArrayList<PhoneCall> callRecordList, int start, int end) {
+        int pivot = callRecordList.get(end).getDuration();
+        int i = start - 1;
+
+        for (int j = start; j < end; j++) {
+            if (callRecordList.get(j).getDuration() < pivot) {
+                i++;
+
+                PhoneCall temp = callRecordList.get(i);
+                callRecordList.set(i, callRecordList.get(j));
+                callRecordList.set(j, temp);
             }
         }
 
-        return longestCall;
+        PhoneCall temp = callRecordList.get(i + 1);
+        callRecordList.set(i + 1, callRecordList.get(end));
+        callRecordList.set(end, temp);
+
+        return i + 1;
     }
 
-    private static PhoneCall searchShortestCall(ArrayList<PhoneCall> callRecordList) {
-        PhoneCall shortestCall = null;
-        int shortestDuration = Integer.MAX_VALUE;
-        for (PhoneCall callRecord : callRecordList) {
-            if (callRecord.getDuration() < shortestDuration) {
-                shortestCall = callRecord;
-            }
-        }
-
-        return shortestCall;
-
-    }
-
-    public static void sortCalls(ArrayList<PhoneCall> callRecordList) {
-
-    }
-
-    private static void createPhoneBill(ArrayList callRecordList) {
-
-    }
-
-    private static void printMenu() {
-        System.out.println("A. Search a call based on the destination number\n" +
-                "B. Display the longest call information\n" +
-                "C. Display the shortest call information\n" +
-                "D. Sort the phone calls array list based on the call duration and display calls in the sorted order\n" +
-                "E. Prepare a phone bill\n" +
-                "F. Exit the program");
-    }
-
-    private static void printCallInfo(PhoneCall callInfo) {
-        System.out.println("Number: " + callInfo.number +
+    // Displays the entire call info in the right panel VBOX
+    private void printCallInfo(VBox rightPanel, PhoneCall callInfo) {
+        rightPanel.getChildren().add(new Label("Number: " + callInfo.number +
                 "\nDuration: " + callInfo.getDuration() +
                 "\nDate: " + callInfo.getDate() +
                 "\nCallee Name: " + callInfo.getCalleeName() +
-                "\nCost: " + callInfo.getCost());
+                "\nCost: $" + callInfo.getCost()));
     }
 }

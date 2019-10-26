@@ -1,6 +1,6 @@
 package Assignment7;
 
-public class PhoneCall implements Comparable {
+public class PhoneCall {
     String number;
     int duration;
     String date;
@@ -33,10 +33,5 @@ public class PhoneCall implements Comparable {
 
     public double getCost() {
         return cost;
-    }
-
-    @Override
-    public int compareTo(Object o) {
-        return 0;
     }
 }
