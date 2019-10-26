@@ -26,7 +26,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws FileNotFoundException {
-        Scanner in = new Scanner(new File("src/Assignment7/phoneCalls.txt"));
+        Scanner in = new Scanner(new File("phoneCalls.txt"));
 
         ArrayList<PhoneCall> callRecordList = new ArrayList<>();
 
@@ -156,7 +156,7 @@ public class Main extends Application {
 
         // Create Scene
         Scene scene = new Scene(borderPane, 1000, 500);
-        scene.getStylesheets().add("./Assignment7/styles.css");
+        scene.getStylesheets().add("styles.css");
 
         // Title
         primaryStage.setTitle("Assignment 7 - Phone Calls");
@@ -168,7 +168,7 @@ public class Main extends Application {
         primaryStage.show();
     }
 
-    // Linear Search. TODO: Binary Search with Strings?
+    // Linear Search for String
     private PhoneCall searchCall(String numberToSearch, ArrayList<PhoneCall> callRecordList) {
         for (PhoneCall callRecord : callRecordList) {
             if (numberToSearch.equals(callRecord.getNumber())) {
