@@ -7,9 +7,8 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
@@ -142,14 +141,16 @@ public class Main extends Application {
         analysisPanel.setAlignment(Pos.CENTER);
         analysisPanel.setSpacing(10);
 
-        leftPanel.getChildren().addAll(textArea, sizePanel);
+        leftPanel.getChildren().addAll(new Label("Text Processor"), textArea, new Label("Size"), sizePanel);
         leftPanel.setPrefWidth(350);
         leftPanel.setPadding(new Insets(10, 5, 10, 10));
         leftPanel.setSpacing(10);
-        rightPanel.getChildren().addAll(textField, analysisPanel);
+        leftPanel.setStyle("-fx-border-color: black;-fx-border-insets: 2;-fx-border-width: 1;");
+        rightPanel.getChildren().addAll(new Label("Analysis Results"), textField, new Label("Analysis Type"), analysisPanel);
         rightPanel.setPrefWidth(350);
         rightPanel.setPadding(new Insets(10, 10, 10, 5));
         rightPanel.setSpacing(10);
+        rightPanel.setStyle("-fx-border-color: black;-fx-border-insets: 2;-fx-border-width: 1;");
 
         borderPane.setLeft(leftPanel);
         borderPane.setRight(rightPanel);
