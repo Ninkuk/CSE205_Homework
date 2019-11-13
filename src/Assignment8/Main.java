@@ -9,7 +9,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
@@ -61,25 +60,8 @@ public class Main extends Application {
             }
         });
 
-        CheckBox[] checkBoxes = new CheckBox[3];
-        String[] checkBoxValues = {"Word Count", "Character Count", "Vowel Count"};
         String[] displayedValues = {"", "", ""};
-
-//        for (int i = 0; i < checkBoxes.length; i++) {
-//            CheckBox checkBox = new CheckBox(checkBoxValues[i]);
-//            checkBoxes[i] = checkBox;
-//            analysisPanel.getChildren().add(checkBox);
-//
-//            checkBox.selectedProperty().addListener(new ChangeListener<Boolean>() {
-//                @Override
-//                public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-//                    if (newValue) {
-//                        displayedValues
-//                    }
-//                    textField.setText(textField.getText() +);
-//                }
-//            });
-//        }
+        int[] computedValues = {0, 0, 0};
 
         CheckBox wordCountCB = new CheckBox("Word Count");
         CheckBox characterCountCB = new CheckBox("Character Count");
@@ -89,7 +71,7 @@ public class Main extends Application {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
                 if (newValue) {
-                    displayedValues[0] = "Word Count: 5";
+                    displayedValues[0] = wordCountCB.getText() + ": " + computedValues[0];
                 } else {
                     displayedValues[0] = "";
                 }
@@ -102,7 +84,7 @@ public class Main extends Application {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
                 if (newValue) {
-                    displayedValues[1] = "Character Count: 6";
+                    displayedValues[1] = characterCountCB.getText() + ": " + computedValues[1];
                 } else {
                     displayedValues[1] = "";
                 }
@@ -115,9 +97,32 @@ public class Main extends Application {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
                 if (newValue) {
-                    displayedValues[2] = "Vowel Count: 6";
+                    displayedValues[2] = vowelCountCB.getText() + ": " + computedValues[2];
                 } else {
                     displayedValues[2] = "";
+                }
+
+                refreshTextField(textField, displayedValues);
+            }
+        });
+
+        textArea.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                computedValues[0] = getWordCount(textArea.getText());
+                computedValues[1] = getCharacterCount(textArea.getText());
+                computedValues[2] = getVowelCount(textArea.getText());
+
+                if (wordCountCB.isSelected()) {
+                    displayedValues[0] = wordCountCB.getText() + ": " + computedValues[0];
+                }
+
+                if (characterCountCB.isSelected()) {
+                    displayedValues[1] = characterCountCB.getText() + ": " + computedValues[1];
+                }
+
+                if (vowelCountCB.isSelected()) {
+                    displayedValues[2] = vowelCountCB.getText() + ": " + computedValues[2];
                 }
 
                 refreshTextField(textField, displayedValues);
@@ -128,6 +133,7 @@ public class Main extends Application {
         // Layout Styles
         textArea.setPrefHeight(650);
         textField.setPrefHeight(650);
+        textField.setEditable(false);
 
         sizePanel.getChildren().addAll(smallRB, mediumRB, largeRB);
         sizePanel.setAlignment(Pos.CENTER);
@@ -159,6 +165,38 @@ public class Main extends Application {
 
         // Show the content on window
         primaryStage.show();
+    }
+
+    private int getWordCount(String text) {
+        String[] words = text.split(" ");
+        if (text.equals("")) {
+            return 0;
+        }
+        return words.length;
+    }
+
+    private int getCharacterCount(String text) {
+        int charCount = 0;
+        String[] words = text.split(" ");
+        for (String word : words) {
+            charCount += word.length();
+        }
+
+        return charCount;
+    }
+
+    private int getVowelCount(String text) {
+        int vowelCount = 0;
+        char[] vowels = {'a', 'e', 'i', 'o', 'u'};
+        for (int i = 0; i < text.length(); i++) {
+            for (char vowel : vowels) {
+                if (text.charAt(i) == vowel) {
+                    vowelCount++;
+                }
+            }
+        }
+
+        return vowelCount;
     }
 
     private void refreshTextField(TextField textField, String[] displayedValues) {
